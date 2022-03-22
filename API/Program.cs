@@ -17,6 +17,18 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 );
 
 var app = builder.Build();
+using var scope = app.Services.CreateScope(); // get rid of of it after
+var context = scope.ServiceProvider.GetRequiredService<StoreContext>(); // get the DB connection
+var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>(); // log any error to the console, since no access to eror exception page
+try
+{
+    context.Database.Migrate();
+    DbInitializer.Initializer(context);
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "Problem Migrating Data");
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
