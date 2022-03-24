@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddCors();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); // connectionString of postgres database
 builder.Services.AddDbContext<StoreContext>(opt =>
@@ -38,6 +38,12 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection(); // No redirection to https, since in devoloper mode
+app.UseRouting();
+
+app.UseCors(opt =>
+{
+    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+});
 
 app.UseAuthorization();
 
