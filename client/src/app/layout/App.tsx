@@ -11,6 +11,7 @@ import { Routes, Route } from 'react-router-dom';
 import { HomePage } from '../../features/home/HomePage';
 import { AboutPage } from '../../features/about/AboutPage';
 import { ContactPage } from '../../features/contact/ContactPage';
+import { ProductDetails } from '../../features/catalog/ProductDetails';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
         </Routes>
       </Container>
     </ThemeProvider>
