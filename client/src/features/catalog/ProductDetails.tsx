@@ -37,7 +37,12 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
   return (
     <Grid container spacing={4}>
       <Grid item xs={4}>
-        <img src={product.pictureUrl} alt={product.name} width="100%" />
+        <img
+          src={product.pictureUrl}
+          alt={product.name}
+          width="100%"
+          style={{ backgroundColor: '#FDEFF4' }}
+        />
       </Grid>
       <Grid item xs={8}>
         <Typography variant="h3">{product.name}</Typography>
