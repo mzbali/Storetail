@@ -7,6 +7,10 @@ import {
 } from '@mui/material';
 import { Catalog } from '../../features/catalog/Catalog';
 import { Header } from './Header';
+import { Routes, Route } from 'react-router-dom';
+import { HomePage } from '../../features/home/HomePage';
+import { AboutPage } from '../../features/about/AboutPage';
+import { ContactPage } from '../../features/contact/ContactPage';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -25,7 +29,12 @@ const App = () => {
       <CssBaseline />
       <Header onSwitchClick={toggleThemeHandler} mode={darkMode} />
       <Container>
-        <Catalog />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/catalog" element={<Catalog />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
       </Container>
     </ThemeProvider>
   );
