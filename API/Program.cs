@@ -1,4 +1,5 @@
 using API.Data;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,9 @@ catch (Exception ex)
 {
     logger.LogError(ex, "Problem Migrating Data");
 }
+
+// Invoke our custom middleware to handle any exception
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
