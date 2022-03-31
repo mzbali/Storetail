@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import agent from '../../app/api/agent';
 import { Product } from '../../app/models/product';
 
 interface ProductDetailsProps {}
@@ -20,13 +21,10 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
   const [loading, setLoading] = useState(true);
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/Products/${id}`)
-      .then((response) => {
-        setProduct(response.data);
-        setLoading(false);
-      })
-      .catch((e) => console.log(e));
+    agent.Catalog.details(parseInt(id ? id : '0')) // take note, comeback later
+      .then((data) => setProduct(data))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
   }, [id]);
   if (loading) {
     return <Typography variant="h3"> Loading...</Typography>;
