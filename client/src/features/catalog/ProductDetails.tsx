@@ -12,6 +12,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import agent from '../../app/api/agent';
+import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { Product } from '../../app/models/product';
 
 interface ProductDetailsProps {}
@@ -27,7 +28,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
       .finally(() => setLoading(false));
   }, [id]);
   if (loading) {
-    return <Typography variant="h3"> Loading...</Typography>;
+    return <LoadingComponent loadingText="Loading Product..." />;
   }
   if (!product) {
     return <Typography variant="h3"> Could Not Load Product</Typography>;
