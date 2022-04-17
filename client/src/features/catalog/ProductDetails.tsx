@@ -12,6 +12,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import agent from '../../app/api/agent';
+import { NotFound } from '../../app/errors/NotFound';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { Product } from '../../app/models/product';
 
@@ -30,15 +31,15 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
   if (loading) {
     return <LoadingComponent loadingText="Loading Product..." />;
   }
-  if (!product) {
-    return <Typography variant="h3"> Could Not Load Product</Typography>;
+  if (!product && !loading) {
+    return <NotFound />;
   }
   return (
     <Grid container spacing={4}>
       <Grid item xs={4}>
         <img
-          src={product.pictureUrl}
-          alt={product.name}
+          src={product!.pictureUrl}
+          alt={product!.name}
           width="100%"
           style={{ backgroundColor: '#FDEFF4' }}
         />
