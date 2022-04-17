@@ -1,16 +1,23 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
+import { history } from '../../main';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
 const responseBody = (response: AxiosResponse) => response.data;
 
+const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
+
 axios.interceptors.response.use(
-  (response: AxiosResponse) => response, // just return the response
-  (error: AxiosError) => {
+  async (response: AxiosResponse) => {
+    await sleep();
+    return response;
+  }, // just return the response
+  async (error: AxiosError) => {
     const { response } = error;
     switch (response?.status) {
       case 400:
+        console.log(response);
         if (response.data?.errors) {
           const validationMessage: string[] = Object.values(
             response.data.errors
@@ -24,10 +31,10 @@ axios.interceptors.response.use(
         toast.error(response.statusText);
         break;
       case 404:
-        toast.error(response.statusText);
+        history.push('/not-found');
         break;
       case 500:
-        toast.error(response.statusText);
+        history.push('/server-error', { data: response.data });
         break;
       default:
         break;
