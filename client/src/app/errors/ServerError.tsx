@@ -1,4 +1,4 @@
-import { Container, Typography, Paper, Divider, Button } from '@mui/material';
+import { Container, Typography, Paper, Divider } from '@mui/material';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { BtnToCatalog } from '../layout/button/BtnToCatalog';
