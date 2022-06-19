@@ -41,34 +41,34 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
           src={product!.pictureUrl}
           alt={product!.name}
           width="100%"
-          style={{ backgroundColor: '#FDEFF4' }}
+          style={{ backgroundColor: '#FDEFF4', objectFit: 'contain' }}
         />
       </Grid>
       <Grid item xs={8}>
-        <Typography variant="h3">{product.name}</Typography>
+        <Typography variant="h3">{product!.name}</Typography>
         <Divider sx={{ mb: 2 }} />
         <TableContainer>
           <Table>
             <TableBody>
               <TableRow>
                 <TableCell>Name:</TableCell>
-                <TableCell>{product.name}</TableCell>
+                <TableCell>{product!.name}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Type:</TableCell>
-                <TableCell>{product.type}</TableCell>
+                <TableCell>{product!.type}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Brand:</TableCell>
-                <TableCell>{product.brand}</TableCell>
+                <TableCell>{product!.brand}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Description:</TableCell>
-                <TableCell>{product.description}</TableCell>
+                <TableCell>{product!.description}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Price:</TableCell>
-                <TableCell>${(product.price / 100).toFixed(2)}</TableCell>
+                <TableCell>${(product!.price / 100).toFixed(2)}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
