@@ -3,7 +3,7 @@ namespace API.Entities
     public class Basket
     {
         public int Id { get; set; }
-        public int BuyerId { get; set; }
+        public string BuyerId { get; set; } = default!;
         public List<BasketItem> Items { get; set; } = new();
 
         // we'll send the productId then find the Product in controller, then add the item to Basket
