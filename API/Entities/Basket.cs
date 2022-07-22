@@ -10,7 +10,7 @@ namespace API.Entities
         // so no need to find it in AddItem
         public void AddItem(Product product, int quantity)
         {
-            if (Items.All(item => item.ProductId != product.Id))
+            if (Items.All(item => item.ProductId != product.Id)) // see if the item not on Basket already using ProductId
             {
                 Items.Add(new BasketItem { Quantity = quantity, Product = product });
             }
