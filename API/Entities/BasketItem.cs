@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {
-    [Table("BasketItems")]
+    [Table("BasketItems")] // name the table BasketItems not BasketItem
     public class BasketItem
     {
         public int Id { get; set; }
