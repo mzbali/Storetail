@@ -9,15 +9,24 @@ namespace API.Controllers
     public class BasketController : BaseController
     {
         private readonly StoreContext _context;
-        public BasketController(StoreContext context)
+        private readonly ILogger<BasketController> _logger;
+        public BasketController(StoreContext context, ILogger<BasketController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasket()
         {
+            // Log the value of the buyerId cookie
+            var buyerId = Request.Cookies["buyerId"];
+            _logger.LogInformation("BuyerId from cookie: {buyerId}", buyerId);
+
             Basket? basket = await RetrieveBasket();
+
+            // Log the retrieved basket
+            _logger.LogInformation("Retrieved basket: {Basket}", basket);
 
             if (basket == null) return NotFound();
 
@@ -61,9 +70,12 @@ namespace API.Controllers
         private Basket CreateBasket()
         {
             var buyerId = Guid.NewGuid().ToString(); // make a new guid (new unique Id)
+
+            _logger.LogInformation("GUID WHEN CREATING: {BuyerId}", buyerId);
+
             // Cookie setup
-            var cookieOption = new CookieOptions { Expires = DateTime.Now.AddDays(3), IsEssential = true };
-            Response.Cookies.Append("buyerId", buyerId, cookieOption);
+            var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30), Secure = false };
+            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
             // Basket creation
             var basket = new Basket { BuyerId = buyerId };
 
