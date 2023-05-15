@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { MaterialUISwitch } from './button/MaterialUiSwitch';
 
 interface HeaderProps {
@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({ onSwitchClick, mode }) => {
           ))}
         </List>
         <Box display="flex" alignItems="center">
-          <IconButton color="inherit">
+          <IconButton color="inherit" component={Link} to="/basket">
             <Badge badgeContent={4} color="secondary">
               <ShoppingCartIcon />
             </Badge>
