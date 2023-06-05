@@ -12,6 +12,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { MaterialUISwitch } from './button/MaterialUiSwitch';
+import { useStoreContext } from '../context/StoreContext';
 
 interface HeaderProps {
   onSwitchClick: () => void;
@@ -38,6 +39,10 @@ const navStyles = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ onSwitchClick, mode }) => {
+  const { basket } = useStoreContext();
+
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <AppBar position="static" sx={{ mb: 4 }}>
       <Toolbar
@@ -60,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({ onSwitchClick, mode }) => {
         </List>
         <Box display="flex" alignItems="center">
           <IconButton color="inherit" component={Link} to="/basket">
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={itemCount} color="secondary">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
