@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container,
   createTheme,
@@ -17,10 +17,27 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ServerError } from '../errors/ServerError';
 import { NotFound } from '../errors/NotFound';
 import { BasketPage } from '../../features/basket/BasketPage';
+import { useStoreContext } from '../context/StoreContext';
+import agent from '../api/agent';
+import { LoadingComponent } from './LoadingComponent';
+import { getCookie } from '../utils/utils';
 
 const App = () => {
+  const { setBasket } = useStoreContext();
+  const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const mode = darkMode ? 'dark' : 'light';
+
+  useEffect(() => {
+    const buyerId = getCookie('buyerId');
+    if (buyerId) {
+      agent.Basket.get()
+        .then((data) => setBasket(data))
+        .catch((error) => console.log('error', error))
+        .finally(() => setLoading(false));
+    } else setLoading(false);
+  }, []);
+
   const theme = createTheme({
     palette: {
       mode: mode,
@@ -30,6 +47,9 @@ const App = () => {
     },
   });
   const toggleThemeHandler = () => setDarkMode(!darkMode);
+
+  if (loading) return <LoadingComponent loadingText="Retrieving Basket" />;
+
   return (
     <ThemeProvider theme={theme}>
       <ToastContainer
