@@ -9,15 +9,28 @@ import {
   Avatar,
   Grid,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../app/models/product';
+import agent from '../../app/api/agent';
+import { useStoreContext } from '../../app/context/StoreContext';
+import { LoadingButton } from '@mui/lab';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { setBasket } = useStoreContext();
+  const [loading, setLoading] = useState(false);
+
+  const handleAddItem = (productId: number) => {
+    setLoading(true);
+    agent.Basket.addItems(productId)
+      .then((basket) => setBasket(basket))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  };
   return (
     <Grid item xs={3}>
       <Card>
@@ -48,7 +61,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Add to cart</Button>
+          <LoadingButton
+            size="small"
+            loading={loading}
+            onClick={() => handleAddItem(product.id)}
+          >
+            Add to cart
+          </LoadingButton>
           <Button size="small" component={Link} to={`/products/${product.id}`}>
             View
           </Button>
