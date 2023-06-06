@@ -3,3 +3,5 @@ export const getCookie = (name: string): string | null => {
   if (match) return match[2];
   return null;
 };
+
+export const currencyFormat = (price: number) => '£' + (price / 100).toFixed(2);
