@@ -5,11 +5,13 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Button,
 } from '@mui/material';
 import { useStoreContext } from '../../app/context/StoreContext';
 import { currencyFormat } from '../../app/utils/utils';
+import { Link } from 'react-router-dom';
 
-export default function BasketSummary() {
+const BasketSummary = () => {
   const { basket } = useStoreContext();
   const subtotal = basket
     ? basket.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -44,6 +46,11 @@ export default function BasketSummary() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Button variant="contained" fullWidth component={Link} to="/checkout">
+        Checkout
+      </Button>
     </>
   );
-}
+};
+
+export default BasketSummary;
