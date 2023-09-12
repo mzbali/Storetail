@@ -12,40 +12,16 @@ import {
   Typography,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'; // <- DeleteIcon import
-import { useStoreContext } from '../../app/context/StoreContext';
 import { Add, Remove } from '@mui/icons-material';
-import agent from '../../app/api/agent';
-import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { currencyFormat } from '../../app/utils/utils';
 import BasketSummary from './BasketSummary';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
+import { addBasketItemAsync, removeBasketItemAsync } from './basketSlice';
 
 export const BasketPage: React.FC = () => {
-  const { basket, setBasket, removeItem } = useStoreContext();
-  const [status, setStatus] = useState({
-    loading: false,
-    name: '',
-  });
-
-  const handleAddItem = (productId: number, name: string) => {
-    setStatus({ loading: true, name: name });
-    agent.Basket.addItems(productId)
-      .then((basket) => setBasket(basket))
-      .catch((error) => console.log(error))
-      .finally(() => setStatus({ loading: false, name: '' }));
-  };
-
-  const handleRemoveItem = (
-    productId: number,
-    quantity: number,
-    name: string
-  ) => {
-    setStatus({ loading: true, name: name });
-    agent.Basket.removeItems(productId, quantity)
-      .then(() => removeItem(productId, quantity))
-      .catch((error) => console.log(error))
-      .finally(() => setStatus({ loading: false, name: '' }));
-  };
+  const { basket, status } = useAppSelector((state) => state.basket);
+  const dispatch = useAppDispatch();
 
   if (!basket) return <Typography variant="h3">There is no basket</Typography>;
 
@@ -85,15 +61,17 @@ export const BasketPage: React.FC = () => {
                 <TableCell align="center">
                   <LoadingButton
                     loading={
-                      status.loading && status.name === 'rem' + item.productId
+                      status ===
+                      'pendingRemoveItem' + item.productId + item.name
                     }
                     aria-label="delete"
                     size="large"
                     onClick={() =>
-                      handleRemoveItem(
-                        item.productId,
-                        1,
-                        'rem' + item.productId
+                      dispatch(
+                        removeBasketItemAsync({
+                          productId: item.productId,
+                          quantity: 1,
+                        })
                       )
                     }
                   >
@@ -103,11 +81,17 @@ export const BasketPage: React.FC = () => {
                   <LoadingButton
                     aria-label="add"
                     loading={
-                      status.loading && status.name === 'add' + item.productId
+                      status === 'pendingAddItem' + item.productId + item.name
                     }
                     size="large"
                     onClick={() =>
-                      handleAddItem(item.productId, 'add' + item.productId)
+                      dispatch(
+                        addBasketItemAsync({
+                          productId: item.productId,
+                          quantity: 1,
+                          name: item.name,
+                        })
+                      )
                     }
                   >
                     <Add fontSize="inherit" color="secondary" />
@@ -121,10 +105,11 @@ export const BasketPage: React.FC = () => {
                     aria-label="delete"
                     size="large"
                     onClick={() =>
-                      handleRemoveItem(
-                        item.productId,
-                        item.quantity,
-                        'del' + item.productId
+                      dispatch(
+                        removeBasketItemAsync({
+                          productId: item.productId,
+                          quantity: item.quantity,
+                        })
                       )
                     }
                   >
