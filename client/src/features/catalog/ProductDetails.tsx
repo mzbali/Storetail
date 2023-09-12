@@ -16,18 +16,22 @@ import { NotFound } from '../../app/errors/NotFound';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { Product } from '../../app/models/product';
 import { LoadingButton } from '@mui/lab';
-import { useStoreContext } from '../../app/context/StoreContext';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
+import {
+  addBasketItemAsync,
+  removeBasketItemAsync,
+} from '../basket/basketSlice';
 
 interface ProductDetailsProps {}
 
 export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
-  const { basket, setBasket, removeItem } = useStoreContext();
+  const dispatch = useAppDispatch();
+  const { basket, status } = useAppSelector((state) => state.basket);
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams<{ id: string }>();
-  const [submitting, setSubmitting] = useState(false);
   const item = basket?.items.find((i) => i.productId === product?.id);
-  const [quantity, setQuantity] = useState(item ? item.quantity : 0);
+  const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
     agent.Catalog.details(parseInt(id ? id : '0')) // take note, comeback later
@@ -46,19 +50,22 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
   };
 
   const handleUpdateQuantity = () => {
-    setSubmitting(true);
     if (!item || quantity > item.quantity) {
       const updatedQuantity = item ? quantity - item.quantity : quantity;
-      agent.Basket.addItems(product!.id, updatedQuantity)
-        .then((basket) => setBasket(basket))
-        .catch((error) => console.log(error))
-        .finally(() => setSubmitting(false));
+      dispatch(
+        addBasketItemAsync({
+          productId: product!.id,
+          quantity: updatedQuantity,
+        })
+      );
     } else {
       const updatedQuantity = item.quantity - quantity;
-      agent.Basket.removeItems(product!.id, updatedQuantity)
-        .then(() => removeItem(product!.id, updatedQuantity))
-        .catch((error) => console.log(error))
-        .finally(() => setSubmitting(false));
+      dispatch(
+        removeBasketItemAsync({
+          productId: product!.id,
+          quantity: updatedQuantity,
+        })
+      );
     }
   };
 
@@ -127,7 +134,9 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
                   item?.quantity === quantity || (!item && quantity === 0)
                 }
                 variant="contained"
-                loading={submitting}
+                loading={
+                  status === 'pendingRemoveItem' + item?.productId + item?.name
+                }
                 sx={{ height: '55px' }}
                 onClick={handleUpdateQuantity}
                 fullWidth
