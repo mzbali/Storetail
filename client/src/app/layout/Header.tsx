@@ -12,7 +12,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { MaterialUISwitch } from './button/MaterialUiSwitch';
-import { useStoreContext } from '../context/StoreContext';
+import { useAppSelector } from '../store/configureStore';
 
 interface HeaderProps {
   onSwitchClick: () => void;
@@ -39,7 +39,7 @@ const navStyles = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ onSwitchClick, mode }) => {
-  const { basket } = useStoreContext();
+  const { basket } = useAppSelector((state) => state.basket);
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
