@@ -9,7 +9,7 @@ interface BasketState {
 
 const initialState: BasketState = {
   basket: null,
-  status: '',
+  status: 'idle',
 };
 
 export const addBasketItemAsync = createAsyncThunk<
@@ -29,16 +29,13 @@ export const addBasketItemAsync = createAsyncThunk<
 export const removeBasketItemAsync = createAsyncThunk<
   void,
   { productId: number; quantity: number; name?: string }
->(
-  'baskets/removeBasketItem',
-  async ({ productId, quantity, name }, thunkAPI) => {
-    try {
-      await agent.Basket.removeItems(productId, quantity);
-    } catch (error: any) {
-      thunkAPI.rejectWithValue({ error: error.data });
-    }
+>('baskets/removeBasketItem', async ({ productId, quantity }, thunkAPI) => {
+  try {
+    await agent.Basket.removeItems(productId, quantity);
+  } catch (error: any) {
+    thunkAPI.rejectWithValue({ error: error.data });
   }
-);
+});
 
 const basketSlice = createSlice({
   name: 'basket',
@@ -78,7 +75,6 @@ const basketSlice = createSlice({
     });
     builder.addCase(removeBasketItemAsync.rejected, (state, action) => {
       state.status = 'idle';
-      console.log(action.payload);
     });
   },
 });
