@@ -7,12 +7,12 @@ import {
   TableCell,
   Button,
 } from '@mui/material';
-import { useStoreContext } from '../../app/context/StoreContext';
 import { currencyFormat } from '../../app/utils/utils';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../../app/store/configureStore';
 
 const BasketSummary = () => {
-  const { basket } = useStoreContext();
+  const { basket } = useAppSelector((state) => state.basket);
   const subtotal = basket
     ? basket.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
     : 0;
