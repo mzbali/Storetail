@@ -11,42 +11,36 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import agent from '../../app/api/agent';
 import { NotFound } from '../../app/errors/NotFound';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
-import { Product } from '../../app/models/product';
 import { LoadingButton } from '@mui/lab';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import {
   addBasketItemAsync,
   removeBasketItemAsync,
 } from '../basket/basketSlice';
+import { fetchProductAsync, productSelectors } from './catalogSlice';
 
 interface ProductDetailsProps {}
 
 export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
   const dispatch = useAppDispatch();
-  const { basket, status } = useAppSelector((state) => state.basket);
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
   const { id } = useParams<{ id: string }>();
+  const { basket, status } = useAppSelector((state) => state.basket);
+  const { status: productStatus } = useAppSelector((state) => state.catalog);
+  const product = useAppSelector((state) =>
+    productSelectors.selectById(state, id!)
+  );
   const item = basket?.items.find((i) => i.productId === product?.id);
   const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
-    agent.Catalog.details(parseInt(id ? id : '0')) // take note, comeback later
-      .then((data) => setProduct(data))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, [id]);
+    if (item) setQuantity(item.quantity);
+    if (!product) dispatch(fetchProductAsync(parseInt(id!)));
+  }, [item, id, fetchProductAsync, dispatch]);
 
   const handleInputChange = (e: any) => {
-    const value = e.target.value;
-    if (value === '') {
-      setQuantity(0);
-    } else if (parseInt(value) >= 0) {
-      setQuantity(parseInt(value));
-    }
+    if (parseInt(e.target.value) >= 0) setQuantity(parseInt(e.target.value));
   };
 
   const handleUpdateQuantity = () => {
@@ -69,10 +63,10 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
     }
   };
 
-  if (loading) {
+  if (productStatus.includes('pending')) {
     return <LoadingComponent loadingText="Loading Product..." />;
   }
-  if (!product && !loading) {
+  if (!product && productStatus.includes('idle')) {
     return <NotFound />;
   }
   return (
@@ -134,9 +128,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({}) => {
                   item?.quantity === quantity || (!item && quantity === 0)
                 }
                 variant="contained"
-                loading={
-                  status === 'pendingRemoveItem' + item?.productId + item?.name
-                }
+                loading={status.includes('pending')}
                 sx={{ height: '55px' }}
                 onClick={handleUpdateQuantity}
                 fullWidth
