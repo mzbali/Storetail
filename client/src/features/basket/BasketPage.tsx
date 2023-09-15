@@ -11,8 +11,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete'; // <- DeleteIcon import
-import { Add, Remove } from '@mui/icons-material';
+import { Add, Remove, Delete } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { currencyFormat } from '../../app/utils/utils';
 import BasketSummary from './BasketSummary';
@@ -71,11 +70,13 @@ export const BasketPage: React.FC = () => {
                         removeBasketItemAsync({
                           productId: item.productId,
                           quantity: 1,
+                          name: item.name,
                         })
                       )
                     }
+                    color="error"
                   >
-                    <Remove fontSize="inherit" color="error" />
+                    <Remove />
                   </LoadingButton>
                   {item.quantity}
                   <LoadingButton
@@ -93,15 +94,20 @@ export const BasketPage: React.FC = () => {
                         })
                       )
                     }
+                    color="secondary"
                   >
-                    <Add fontSize="inherit" color="secondary" />
+                    <Add />
                   </LoadingButton>
                 </TableCell>
                 <TableCell align="right">
                   {((item.price / 100) * item.quantity).toFixed(2)}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton
+                  <LoadingButton
+                    loading={
+                      status ===
+                      'pendingRemoveItem' + item.productId + item.name
+                    }
                     aria-label="delete"
                     size="large"
                     onClick={() =>
@@ -109,12 +115,14 @@ export const BasketPage: React.FC = () => {
                         removeBasketItemAsync({
                           productId: item.productId,
                           quantity: item.quantity,
+                          name: item.name,
                         })
                       )
                     }
+                    color="error"
                   >
-                    <DeleteIcon fontSize="inherit" color="error" />
-                  </IconButton>
+                    <Delete />
+                  </LoadingButton>
                 </TableCell>
               </TableRow>
             ))}
