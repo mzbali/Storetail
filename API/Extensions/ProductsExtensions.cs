@@ -4,12 +4,12 @@ namespace API.Extensions
 {
     public static class ProductsExtension
     {
-        public static IQueryable<Product> Sort(this IQueryable<Product> query, string? OrderBy)
+        public static IQueryable<Product> Sort(this IQueryable<Product> query, string? orderBy)
         {
             // If orderBy has null or whitespace from the user return just name in alphabatical order
-            if (string.IsNullOrWhiteSpace(OrderBy)) return query.OrderBy(p => p.Name);
+            if (string.IsNullOrWhiteSpace(orderBy)) return query.OrderBy(p => p.Name);
 
-            query = OrderBy switch
+            query = orderBy switch
             {
                 "price" => query.OrderBy(p => p.Price),
                 "priceDesc" => query.OrderByDescending(p => p.Price),
