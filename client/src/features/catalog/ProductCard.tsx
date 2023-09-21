@@ -8,13 +8,13 @@ import {
   CardHeader,
   Avatar,
   Grid,
-} from '@mui/material';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Product } from '../../app/models/product';
-import { LoadingButton } from '@mui/lab';
-import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
-import { addBasketItemAsync } from '../basket/basketSlice';
+} from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Product } from "../../app/models/product";
+import { LoadingButton } from "@mui/lab";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { addBasketItemAsync } from "../basket/basketSlice";
 
 interface ProductCardProps {
   product: Product;
@@ -25,23 +25,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const dispatch = useAppDispatch();
 
   return (
-    <Grid item xs={3}>
+    <Grid item xs={4}>
       <Card>
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: 'secondary.light' }} aria-label="Brand Logo">
+            <Avatar sx={{ bgcolor: "secondary.light" }} aria-label="Brand Logo">
               {product.name.charAt(0).toUpperCase()}
             </Avatar>
           }
           title={product.name}
           titleTypographyProps={{
-            sx: { fontWeight: 'bold', color: 'primary.main' },
+            sx: { fontWeight: "bold", color: "primary.main" },
           }}
         />
         <CardMedia
           component="img"
           height="140"
-          sx={{ objectFit: 'contain', bgcolor: 'primary.light' }}
+          sx={{ objectFit: "contain", bgcolor: "primary.light" }}
           image={product.pictureUrl}
           alt={product.name}
         />
@@ -56,7 +56,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <CardActions>
           <LoadingButton
             size="small"
-            loading={status === 'pendingAddItem' + product.id + product.name}
+            loading={status === "pendingAddItem" + product.id + product.name}
             onClick={() =>
               dispatch(
                 addBasketItemAsync({

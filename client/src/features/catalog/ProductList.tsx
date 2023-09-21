@@ -1,7 +1,7 @@
-import { Grid } from '@mui/material';
-import React from 'react';
-import { Product } from '../../app/models/product';
-import { ProductCard } from './ProductCard';
+import { Grid } from "@mui/material";
+import React from "react";
+import { Product } from "../../app/models/product";
+import { ProductCard } from "./ProductCard";
 
 interface ProductsListProps {
   products: Product[];
