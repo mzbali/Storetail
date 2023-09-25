@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../../main";
+import { PaginatedItems } from "../models/pagination";
+import { Product } from "../models/product";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
 axios.defaults.withCredentials = true; // to allow cookies to be sent to server.
@@ -12,6 +14,14 @@ const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 axios.interceptors.response.use(
   async (response: AxiosResponse) => {
     await sleep();
+    const pagination = response.headers["pagination"];
+    console.log(pagination);
+    if (pagination) {
+      response.data = new PaginatedItems<Product[]>(
+        response.data,
+        JSON.parse(pagination)
+      );
+    }
     return response;
   }, // just return the response
   async (error: AxiosError) => {
