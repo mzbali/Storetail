@@ -7,11 +7,13 @@ import {
   fetchFiltersAsync,
   fetchProductsAsync,
   productSelectors,
+  setPaginationParams,
   setProductParams,
 } from "./catalogSlice";
 import SearchProduct from "../../app/components/SearchProduct";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 import CheckBoxButtons from "../../app/components/CheckBoxButtons";
+import { AppPagination } from "../../app/components/AppPagination";
 
 const sortOptions = [
   { value: "name", label: "Alphabetical" },
@@ -21,8 +23,14 @@ const sortOptions = [
 
 export const Catalog: React.FC = ({}) => {
   const products = useAppSelector(productSelectors.selectAll);
-  const { productsLoaded, filtersFetched, brands, types, productParams } =
-    useAppSelector((state) => state.catalog);
+  const {
+    productsLoaded,
+    filtersFetched,
+    brands,
+    types,
+    productParams,
+    metaData,
+  } = useAppSelector((state) => state.catalog);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -33,11 +41,11 @@ export const Catalog: React.FC = ({}) => {
     if (!filtersFetched) dispatch(fetchFiltersAsync());
   }, [filtersFetched, fetchFiltersAsync, dispatch]);
 
-  if (!productsLoaded) {
-    return <LoadingComponent />;
+  if (!filtersFetched) {
+    return <LoadingComponent loadingText="Loading Products.." />;
   }
   return (
-    <Grid container columnSpacing={2}>
+    <Grid container columnSpacing={4}>
       <Grid item xs={3}>
         <Paper sx={{ mb: 2 }}>
           <SearchProduct />
@@ -68,7 +76,18 @@ export const Catalog: React.FC = ({}) => {
         </Paper>
       </Grid>
       <Grid item xs={9}>
-        <ProductList products={products} />
+        <ProductList products={products} productsLoaded={productsLoaded} />
+      </Grid>
+      <Grid item xs={3} />
+      <Grid item xs={9}>
+        {metaData && (
+          <AppPagination
+            metaData={metaData}
+            onPageChange={(value: number) =>
+              dispatch(setPaginationParams({ pageNumber: value }))
+            }
+          />
+        )}
       </Grid>
     </Grid>
   );
