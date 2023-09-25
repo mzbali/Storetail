@@ -23,9 +23,9 @@ const CheckBoxButtons: React.FC<CheckBoxButtonsProps> = ({
 
   const handleChecked = (value: string) => {
     const currentIndex = checkedItems.findIndex((item) => item === value);
-    let newChecked: string[] = [];
+    let newChecked: string[] = [...checkedItems];
     if (currentIndex === -1) newChecked = [...checkedItems, value];
-    else newChecked.filter((item) => item !== value);
+    else newChecked = newChecked.filter((item) => item !== value);
     setCheckedItems(newChecked);
     onChange(newChecked);
   };
@@ -43,6 +43,7 @@ const CheckBoxButtons: React.FC<CheckBoxButtonsProps> = ({
             />
           }
           label={item}
+          key={item}
         />
       ))}
     </FormGroup>
