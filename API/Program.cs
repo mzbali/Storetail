@@ -1,6 +1,13 @@
+using System.Text;
 using API.Data;
+using API.Entities;
 using API.Middleware;
+using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,22 +16,70 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddCors();
+builder.Services.AddSwaggerGen(c =>
+{
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        Description = "Put Bearer + your token in the box below",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); // connectionString of postgres database
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            jwtSecurityScheme, new List<string>()
+        }
+    });
+});
+builder.Services.AddCors();
+builder.Services.AddIdentityCore<User>(opt => { opt.User.RequireUniqueEmail = true; })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<StoreContext>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:SecurityKey"]))
+        };
+    }
+);
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<TokenService>();
+
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection"); // connectionString of postgres database
 builder.Services.AddDbContext<StoreContext>(opt =>
-    opt.UseNpgsql(connectionString) // connection with postgres
+        opt.UseNpgsql(connectionString) // connection with postgres
 );
 
 var app = builder.Build();
 using var scope = app.Services.CreateScope(); // get rid of of it after
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>(); // get the DB connection
-var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>(); // log any error to the console, since no access to eror exception page
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+var logger =
+    scope.ServiceProvider
+        .GetRequiredService<
+            ILogger<Program>>(); // log any error to the console, since no access to error exception page
 try
 {
     context.Database.Migrate();
-    DbInitializer.Initializer(context);
+    await DbInitializer.Initializer(context, userManager);
 }
 catch (Exception ex)
 {
@@ -41,13 +96,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection(); // No redirection to https, since in devoloper mode
+// app.UseHttpsRedirection(); // No redirection to https, since in developer mode
 app.UseRouting();
 
 app.UseCors(opt =>
 {
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
 });
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
