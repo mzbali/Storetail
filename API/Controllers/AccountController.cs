@@ -22,7 +22,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await _userManager.FindByNameAsync(loginDto.Name);
-            if (user == null || await _userManager.CheckPasswordAsync(user, loginDto.Password))
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
                 return Unauthorized();
             return new UserDto
             {
@@ -34,14 +34,20 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterDto registerDto)
         {
-            var user = new User { UserName = registerDto.Name, Email = registerDto.Email };
+            var user = new User
+            {
+                UserName = registerDto.Name,
+                Email = registerDto.Email
+            };
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded)
+            {
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(error.Description, error.Code);
-                    return ValidationProblem();
                 }
+                return ValidationProblem();
+            }
 
             await _userManager.AddToRoleAsync(user, "Member");
             return StatusCode(201);
