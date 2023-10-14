@@ -54,6 +54,9 @@ const basketSlice = createSlice({
         setBasket: (state, action) => {
             state.basket = action.payload;
         },
+        resetBasket: (state) => {
+            state.basket = null;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(addBasketItemAsync.pending, (state, action) => {
@@ -90,6 +93,6 @@ const basketSlice = createSlice({
     },
 });
 
-export const {setBasket} = basketSlice.actions;
+export const {setBasket, resetBasket} = basketSlice.actions;
 
 export default basketSlice;
