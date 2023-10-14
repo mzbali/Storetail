@@ -4,5 +4,6 @@ namespace API.DTOs
     {
         public string Email { get; set; } = default!;
         public string Token { get; set; } = default!;
+        public BasketDto? Basket { get; set; }
     }
 }
