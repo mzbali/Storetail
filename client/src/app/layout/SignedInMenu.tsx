@@ -3,9 +3,10 @@ import {Button, Menu, MenuItem, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../store/configureStore";
 import {signOut} from "../../features/account/accountSlice";
+import {resetBasket} from "../../features/basket/basketSlice";
 
 const SignedInMenu: React.FC = () => {
-    const {user} = useAppSelector(state => state.account)
+    const {user} = useAppSelector(state => state.account);
     const dispatch = useAppDispatch();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -39,12 +40,13 @@ const SignedInMenu: React.FC = () => {
                 <MenuItem
                     onClick={() => {
                         dispatch(signOut());
+                        dispatch(resetBasket());
                     }}>
                     Logout
                 </MenuItem>
             </Menu>
         </>
     );
-}
+};
 
 export default SignedInMenu;
