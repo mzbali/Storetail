@@ -12,20 +12,23 @@ namespace API.Entities
         {
             if (Items.All(item => item.ProductId != product.Id)) // see if the item not on Basket already using ProductId
             {
-                Items.Add(new BasketItem { Quantity = quantity, Product = product });
+                Items.Add(new BasketItem
+                {
+                    Quantity = quantity,
+                    Product = product
+                });
             }
             var existingItem = Items.FirstOrDefault(item => item.ProductId == product.Id);
 
             if (existingItem != null) existingItem.Quantity += quantity;
         }
 
-        public void removeItem(int productId, int quantity)
+        public void RemoveItem(int productId, int quantity)
         {
             var item = Items.FirstOrDefault(item => item.ProductId == productId);
             if (item == null) return;
             item.Quantity -= quantity;
             if (item.Quantity == 0) Items.Remove(item);
         }
-
     }
 }
