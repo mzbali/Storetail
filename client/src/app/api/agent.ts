@@ -1,9 +1,8 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {toast} from "react-toastify";
-import {history} from "../../main";
 import {PaginatedItems} from "../models/pagination";
 import {Product} from "../models/product";
-import {store} from "../store/configureStore";
+import router from "../router/Routes";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
 axios.defaults.withCredentials = true; // to allow cookies to be sent to server.
@@ -13,8 +12,16 @@ const responseBody = (response: AxiosResponse) => response.data;
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 axios.interceptors.request.use(config => {
-    const token = store.getState().account.user?.token;
-    if (token) config.headers!.Authorization = `Bearer ${token}`;
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = user?.token;
+
+    // Check if the user exists
+    if (token) {
+        // Set the Authorization header with the user's token
+        config.headers!.Authorization = `Bearer ${token}`;
+    }
+
+    // Return the config object
     return config;
 });
 
@@ -46,10 +53,10 @@ axios.interceptors.response.use(
                 toast.error(response.statusText);
                 break;
             case 404:
-                history.push("/not-found");
+                await router.navigate("/not-found");
                 break;
             case 500:
-                history.push("/server-error", {data: response.data});
+                await router.navigate("/server-error");
                 break;
             default:
                 break;
