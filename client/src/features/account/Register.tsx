@@ -1,18 +1,17 @@
-import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import {Link} from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import {Link, useNavigate} from "react-router-dom";
 import {Paper} from "@mui/material";
 import agent from "../../app/api/agent";
 import {FieldValues, useForm} from "react-hook-form";
 import {LoadingButton} from "@mui/lab";
-import {history} from "../../main";
 import {toast} from "react-toastify";
 
 const Register = () => {
@@ -22,17 +21,18 @@ const Register = () => {
         setError,
         formState: {isSubmitting, errors, isValid}
     } = useForm({mode: "all"});
+    const navigate = useNavigate();
 
     const handleApiErrors = (errors: string[]) => {
         console.log(errors);
         if (errors) {
             errors.forEach(error => {
                 if (error.includes("Name")) {
-                    setError('name', {message: error});
+                    setError("name", {message: error});
                 } else if (error.includes("Email")) {
-                    setError('email', {message: error});
+                    setError("email", {message: error});
                 } else if (error.includes("Password")) {
-                    setError('password', {message: error});
+                    setError("password", {message: error});
                 }
             });
         }
@@ -42,7 +42,7 @@ const Register = () => {
         agent.Account.register(data)
             .then(() => {
                 toast.success("Registration successful - you can now login ");
-                history.push('/login');
+                navigate("/login");
             })
             .catch(errors => {
                 handleApiErrors(errors);
@@ -52,13 +52,13 @@ const Register = () => {
     return (
         <Container component={Paper} maxWidth="xs" sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
             padding: 3
         }}>
 
-            <Avatar sx={{m: 1, backgroundColor: 'secondary.main'}}>
+            <Avatar sx={{m: 1, backgroundColor: "secondary.main"}}>
                 <LockOutlinedIcon/>
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -84,7 +84,7 @@ const Register = () => {
                     margin="normal"
                     fullWidth
                     label="Username"
-                    {...register('name', {required: "Username is required"})}
+                    {...register("name", {required: "Username is required"})}
                     error={!!errors?.name}
                     helperText={errors.name?.message}
                 />
@@ -93,7 +93,7 @@ const Register = () => {
                     fullWidth
                     label="Password"
                     type="password"
-                    {...register('password', {
+                    {...register("password", {
                         required: "Password is required",
                         pattern: {
                             value: /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{quot:'?/g.l,])(?!.*\s).*$/,
