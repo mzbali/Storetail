@@ -70,7 +70,7 @@ namespace API.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BuyerId = table.Column<int>(type: "integer", nullable: false),
+                    BuyerId = table.Column<string>(type: "text", nullable: false),
                     ShippingAddress_FullName = table.Column<string>(type: "text", nullable: false),
                     ShippingAddress_Address1 = table.Column<string>(type: "text", nullable: false),
                     ShippingAddress_Address2 = table.Column<string>(type: "text", nullable: false),
@@ -292,8 +292,8 @@ namespace API.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "4b2aae7d-20ae-466c-bdcc-022e62a15a13", "Member", "MEMBER" },
-                    { 2, "7974eab7-1ab3-4f25-b741-0ddc7a34dddf", "Admin", "ADMIN" }
+                    { 1, "f528d9d6-ebb7-4c69-8be6-108e1b99bc3d", "Member", "MEMBER" },
+                    { 2, "8bdae942-f51e-4740-8f2c-3c632c8440b4", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

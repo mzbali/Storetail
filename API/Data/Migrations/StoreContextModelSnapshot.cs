@@ -73,8 +73,9 @@ namespace API.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BuyerId")
-                        .HasColumnType("integer");
+                    b.Property<string>("BuyerId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<long>("DeliveryFee")
                         .HasColumnType("bigint");
@@ -188,14 +189,14 @@ namespace API.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "4b2aae7d-20ae-466c-bdcc-022e62a15a13",
+                            ConcurrencyStamp = "f528d9d6-ebb7-4c69-8be6-108e1b99bc3d",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7974eab7-1ab3-4f25-b741-0ddc7a34dddf",
+                            ConcurrencyStamp = "8bdae942-f51e-4740-8f2c-3c632c8440b4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
