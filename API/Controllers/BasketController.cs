@@ -24,7 +24,7 @@ namespace API.Controllers
             var buyerId = GetBuyerId();
             _logger.LogInformation("BuyerId from cookie: {buyerId}", buyerId);
 
-            var basket = await _context.Baskets.RetrieveBasket(buyerId, _context);
+            var basket = await _context.Baskets.RetrieveBasketWithItems(buyerId).FirstOrDefaultAsync();
 
             // Log the retrieved basket
             _logger.LogInformation("Retrieved basket: {Basket}", basket);
@@ -42,7 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
         {
             // get Basket || create Basket
-            var basket = await _context.Baskets.RetrieveBasket(GetBuyerId(), _context) ?? CreateBasket(); // don't forget to await
+            var basket = await _context.Baskets.RetrieveBasketWithItems(GetBuyerId()).FirstOrDefaultAsync() ?? CreateBasket(); // don't forget to await
             // get Product
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
@@ -65,7 +65,7 @@ namespace API.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteBasket(int productId, int quantity)
         {
-            var basket = await _context.Baskets.RetrieveBasket(GetBuyerId(), _context);
+            var basket = await _context.Baskets.RetrieveBasketWithItems(GetBuyerId()).FirstOrDefaultAsync();
             if (basket == null)
                 return NotFound(new ProblemDetails
                 {

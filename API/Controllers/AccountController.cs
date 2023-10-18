@@ -6,6 +6,7 @@ using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -29,8 +30,8 @@ namespace API.Controllers
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
                 return Unauthorized();
 
-            var anonBasket = await _context.Baskets.RetrieveBasket(Request.Cookies["buyerId"], _context);
-            var userBasket = await _context.Baskets.RetrieveBasket(loginDto.Name, _context);
+            var anonBasket = await _context.Baskets.RetrieveBasketWithItems(Request.Cookies["buyerId"]).FirstOrDefaultAsync();
+            var userBasket = await _context.Baskets.RetrieveBasketWithItems(loginDto.Name).FirstOrDefaultAsync();
 
             if (anonBasket != null)
             {
@@ -83,7 +84,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.FindByNameAsync(User.Identity?.Name);
-            var basket = await _context.Baskets.RetrieveBasket(User.Identity?.Name, _context);
+            var basket = await _context.Baskets.RetrieveBasketWithItems(User.Identity?.Name).FirstOrDefaultAsync();
 
             return new UserDto
             {
