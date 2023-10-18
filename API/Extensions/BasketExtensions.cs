@@ -1,4 +1,3 @@
-using API.Data;
 using API.DTOs;
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -26,14 +25,14 @@ namespace API.Extensions
                 }).ToList()
             };
         }
-        public static async Task<Basket?> RetrieveBasket(this IQueryable<Basket> basket, string? buyerId, StoreContext context)
+        public static IQueryable<Basket> RetrieveBasketWithItems(this IQueryable<Basket> basket, string? buyerId)
         {
-            if (string.IsNullOrEmpty(buyerId)) return null;
+            if (string.IsNullOrEmpty(buyerId)) return basket;
 
-            return await context.Baskets
+            return basket
                 .Include(i => i.Items) // include items list
                 .ThenInclude(p => p.Product) // in that items all the Product details
-                .FirstOrDefaultAsync(x => x.BuyerId == buyerId);
+                .Where(x => x.BuyerId == buyerId);
         }
     }
 }
