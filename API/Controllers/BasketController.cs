@@ -106,19 +106,6 @@ namespace API.Controllers
             return basket;
         }
 
-        private async Task<Basket?> RetrieveBasket(string buyerId)
-        {
-            if (string.IsNullOrEmpty(buyerId))
-            {
-                Response.Cookies.Delete("buyerId");
-                return null;
-            }
-
-            return await _context.Baskets
-                .Include(i => i.Items) // include items list
-                .ThenInclude(p => p.Product) // in that items all the Product details
-                .FirstOrDefaultAsync(x => x.BuyerId == buyerId);
-        }
 
         private string GetBuyerId()
         {
