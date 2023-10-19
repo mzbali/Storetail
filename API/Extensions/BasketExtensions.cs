@@ -27,7 +27,6 @@ namespace API.Extensions
         }
         public static IQueryable<Basket> RetrieveBasketWithItems(this IQueryable<Basket> basket, string? buyerId)
         {
-            if (string.IsNullOrEmpty(buyerId)) return basket;
 
             return basket
                 .Include(i => i.Items) // include items list
