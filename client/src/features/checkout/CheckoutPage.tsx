@@ -1,9 +1,15 @@
 import {Box, Button, Paper, Step, StepLabel, Stepper, Typography} from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
 import {FieldValues, FormProvider, useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {validationSchema} from "./checkoutValidation";
+import {useAppDispatch, useAppSelector} from "../../app/store/configureStore";
+import {createOrderAsync} from "./checkoutSlice";
+import {OrderValue} from "../../app/models/order";
+import agent from "../../app/api/agent";
 
 const steps = ["Shipping address", "Review your order", "Payment details"];
 
@@ -21,13 +27,29 @@ function getStepContent(step: number) {
 }
 
 const CheckoutPage = () => {
-    const methods = useForm();
-
     const [activeStep, setActiveStep] = useState(0);
 
-    const handleNext = (values: FieldValues) => {
-        if (activeStep === 0)
+    const dispatch = useAppDispatch();
+    const {orderNumber} = useAppSelector(state => state.orders);
+    const methods = useForm({
+        resolver: yupResolver(validationSchema[activeStep]),
+        mode: "all",
+    });
+
+    useEffect(() => {
+        agent.Account.getAddress().then(response => {
+            methods.reset({...methods.getValues(), ...response, saveAddress: false});
+            console.log(response);
+        });
+    }, []);
+
+    const handleNext = async (values: FieldValues) => {
+        if (activeStep === steps.length - 1) {
+            const {saveAddress, cardName, ...value} = values;
+            const valueInput = {shippingAddress: value, saveAddress};
+            await dispatch(createOrderAsync(valueInput as OrderValue));
             console.log(values);
+        }
         setActiveStep(prevState => prevState + 1);
     };
 
@@ -56,7 +78,7 @@ const CheckoutPage = () => {
                                 Thank you for your order.
                             </Typography>
                             <Typography variant="subtitle1">
-                                Your order number is #2001539. We have emailed your order
+                                Your order number is #{orderNumber}. We have emailed your order
                                 confirmation, and will send you an update when your order has
                                 shipped.
                             </Typography>
