@@ -3,6 +3,7 @@ import {toast} from "react-toastify";
 import {PaginatedItems} from "../models/pagination";
 import {Product} from "../models/product";
 import router from "../router/Routes";
+import {OrderValue} from "../models/order";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
 axios.defaults.withCredentials = true; // to allow cookies to be sent to server.
@@ -76,7 +77,8 @@ const requests = {
 const Account = {
     login: (value: any) => requests.post("account/login", value),
     register: (value: any) => requests.post("account/register", value),
-    currentUser: () => requests.get("account/currentUser")
+    currentUser: () => requests.get("account/currentUser"),
+    getAddress: () => requests.get("account/getAddress")
 };
 
 const Catalog = {
@@ -101,11 +103,18 @@ const Basket = {
         requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
 };
 
+const Order = {
+    orders: () => requests.get("order"),
+    order: (id: number) => requests.get(`order/${id}`),
+    createOrder: (value: OrderValue) => requests.post("order", value)
+};
+
 const agent = {
     Catalog,
     Buggy,
     Basket,
-    Account
+    Account,
+    Order
 };
 
 export default agent;
