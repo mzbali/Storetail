@@ -10,7 +10,7 @@ namespace API.Entities.OrderAggregate
         [Required] public ShippingAddress ShippingAddress { get; set; } = default!;
 
         public List<OrderItem> OrderItems { get; set; } = default!;
-        public DateTime OrderDate { get; set; } = DateTime.Now;
+        public DateTime OrderDate { get; set; } = DateTime.Now.ToUniversalTime();
         public long SubTotal { get; set; }
         public long DeliveryFee { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
