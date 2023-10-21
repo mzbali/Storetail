@@ -93,5 +93,19 @@ namespace API.Controllers
                 Basket = basket?.MapToBasketDto()
             };
         }
+
+        [HttpGet("getAddress")]
+        public async Task<ActionResult<UserAddress>> GetAddress()
+        {
+            var user = await _userManager.Users
+                .Include(u => u.Address)
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefaultAsync();
+            if (user is null)
+            {
+                return BadRequest("User address can't be found.");
+            }
+            return user.Address;
+        }
     }
 }
