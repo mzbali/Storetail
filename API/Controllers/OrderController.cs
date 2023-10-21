@@ -36,6 +36,7 @@ namespace API.Controllers
                 .FirstOrDefaultAsync();
         }
 
+
         [HttpPost]
         public async Task<ActionResult<int>> CreateOrder(CreateOrderDto createOrderDto)
         {
@@ -80,7 +81,6 @@ namespace API.Controllers
                 BuyerId = User.Identity.Name,
                 ShippingAddress = createOrderDto.ShippingAddress,
                 OrderItems = items,
-                OrderDate = default,
                 SubTotal = total,
                 DeliveryFee = deliveryFee,
                 Status = OrderStatus.Pending
