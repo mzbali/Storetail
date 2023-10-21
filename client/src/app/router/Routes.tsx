@@ -12,6 +12,7 @@ import {NotFound} from "../errors/NotFound";
 import RequireAuth from "./RequireAuth";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
 import {BasketPage} from "../../features/basket/BasketPage";
+import OrderPage from "../../features/basket/OrderPage";
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
             {path: "basket", element: <BasketPage/>},
             {path: "login", element: <Login/>},
             {path: "register", element: <Register/>},
+            {path: "orders", element: <OrderPage/>},
             {path: "products/:id", element: <ProductDetails/>},
             {path: "server-error", element: <ServerError/>},
             {path: "not-found", element: <NotFound/>},
