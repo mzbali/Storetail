@@ -24,13 +24,16 @@ const AddressForm = () => {
                     <AppTextField label="City" name="city" control={control}/>
                 </Grid>
                 <Grid item xs={12} sm={6}>
+                    <AppTextField label="Zip" name="zip" control={control}/>
+                </Grid>
+                <Grid item xs={12} sm={6}>
                     <AppTextField label="State" name="state" control={control}/>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <AppTextField label="Country" name="country" control={control}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <AppCheckBox label="Save this Address" name="saveAdress"/>
+                    <AppCheckBox label="Save this Address" name="saveAddress" disabled={!formState.isDirty}/>
                 </Grid>
             </Grid>
         </>
