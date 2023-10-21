@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {Button, Menu, MenuItem, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../store/configureStore";
@@ -33,8 +33,8 @@ const SignedInMenu: React.FC = () => {
             >
                 <MenuItem onClick={handleClose}>Home</MenuItem>
                 <MenuItem onClick={handleClose}>
-                    <Link to="/basket" style={{textDecoration: 'none', color: 'inherit'}}>
-                        My Basket
+                    <Link to="/orders" style={{textDecoration: "none", color: "inherit"}}>
+                        My Orders
                     </Link>
                 </MenuItem>
                 <MenuItem
