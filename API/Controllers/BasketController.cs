@@ -83,19 +83,23 @@ namespace API.Controllers
 
         private Basket CreateBasket()
         {
-            var buyerId = Guid.NewGuid().ToString(); // make a new guid (new unique Id)
-
-            _logger.LogInformation("GUID WHEN CREATING: {BuyerId}", buyerId);
-
-            // Cookie setup
-            var cookieOptions = new CookieOptions
+            var buyerId = User.Identity?.Name;
+            if (string.IsNullOrEmpty(buyerId))
             {
-                IsEssential = true,
-                Expires = DateTime.Now.AddDays(30),
-                Secure = false
-            };
-            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
-            // Basket creation
+                buyerId = Guid.NewGuid().ToString(); // make a new guid (new unique Id)
+
+                _logger.LogInformation("GUID WHEN CREATING: {BuyerId}", buyerId);
+
+                // Cookie setup
+                var cookieOptions = new CookieOptions
+                {
+                    IsEssential = true,
+                    Expires = DateTime.Now.AddDays(30),
+                    Secure = false
+                };
+                Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+                // Basket creation
+            }
             var basket = new Basket
             {
                 BuyerId = buyerId
