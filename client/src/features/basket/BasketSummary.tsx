@@ -1,12 +1,12 @@
 import {Paper, Table, TableBody, TableCell, TableContainer, TableRow,} from "@mui/material";
 import {currencyFormat} from "../../app/utils/utils";
-import {useAppSelector} from "../../app/store/configureStore";
+import React from "react";
 
-const BasketSummary = () => {
-    const {basket} = useAppSelector((state) => state.basket);
-    const subtotal = basket
-        ? basket.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-        : 0;
+interface BasketSummaryProps {
+    subtotal: number;
+}
+
+const BasketSummary: React.FC<BasketSummaryProps> = ({subtotal}) => {
     const deliveryFee = subtotal >= 10000 ? 0 : 500;
     return (
         <>
