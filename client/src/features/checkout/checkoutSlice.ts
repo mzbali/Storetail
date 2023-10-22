@@ -85,12 +85,14 @@ const checkoutSlice = createSlice({
         });
         builder.addCase(fetchOrderAsync.fulfilled, (state, action) => {
             state.status = "idle";
-            if (state.orders) {
-                const findIndex = state.orders.findIndex(o => o.id === action.payload.id);
-                if (findIndex !== -1) {
-                    state.orders[findIndex] = action.payload;
-                } else state.orders = [...state.orders, action.payload];
+            if (state.orders === null) {
+                state.orders = [];
             }
+            const findIndex = state.orders.findIndex(o => o.id === action.payload.id);
+            if (findIndex !== -1) {
+                state.orders[findIndex] = action.payload;
+            } else state.orders = [...state.orders, action.payload];
+
         });
         builder.addMatcher(isAnyOf(fetchOrderAsync.pending, fetchOrdersAsync.pending, createOrderAsync.pending), (state, action) => {
             state.status = "pending";
