@@ -5,6 +5,10 @@ import BasketSummary from "../basket/BasketSummary";
 
 const Review = () => {
     const {basket} = useAppSelector(state => state.basket);
+    const subtotal = basket
+        ? basket.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+        : 0;
+    const deliveryFee = subtotal >= 10000 ? 0 : 500;
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -14,7 +18,7 @@ const Review = () => {
             {basket && <Grid container>
                 <Grid item xs={6}/>
                 <Grid item xs={6}>
-                    <BasketSummary/>
+                    <BasketSummary subtotal={subtotal}/>
                 </Grid>
             </Grid>}
         </>
