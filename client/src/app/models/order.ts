@@ -26,7 +26,7 @@ export interface Order {
     buyerId: string;
     address: Address;
     orderItems: OrderItem[];
-    orderDate: Date;
+    orderDate: string;
     subTotal: number;
     orderStatus: string;
     deliveryFee: number;
