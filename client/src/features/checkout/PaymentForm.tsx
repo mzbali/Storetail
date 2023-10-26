@@ -1,6 +1,8 @@
-import {Checkbox, FormControlLabel, Grid, TextField, Typography} from "@mui/material";
+import {Grid, TextField, Typography} from "@mui/material";
 import {useFormContext} from "react-hook-form";
 import AppTextField from "../../app/components/AppTextField";
+import {CardCvcElement, CardExpiryElement, CardNumberElement} from "@stripe/react-stripe-js";
+import StripeInput from "./StripeInput";
 
 const PaymentForm = () => {
     const {control} = useFormContext();
@@ -23,7 +25,14 @@ const PaymentForm = () => {
                         label="Card number"
                         fullWidth
                         autoComplete="cc-number"
-                        variant="standard"
+                        variant="outlined"
+                        InputLabelProps={{shrink: true}}
+                        InputProps={{
+                            inputComponent: StripeInput,
+                            inputProps: {
+                                component: CardNumberElement
+                            }
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -32,7 +41,14 @@ const PaymentForm = () => {
                         label="Expiry date"
                         fullWidth
                         autoComplete="cc-exp"
-                        variant="standard"
+                        variant="outlined"
+                        InputLabelProps={{shrink: true}}
+                        InputProps={{
+                            inputComponent: StripeInput,
+                            inputProps: {
+                                component: CardExpiryElement
+                            }
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -42,13 +58,14 @@ const PaymentForm = () => {
                         helperText="Last three digits on signature strip"
                         fullWidth
                         autoComplete="cc-csc"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControlLabel
-                        control={<Checkbox color="secondary" name="saveCard" value="yes"/>}
-                        label="Remember credit card details for next time"
+                        variant="outlined"
+                        InputLabelProps={{shrink: true}}
+                        InputProps={{
+                            inputComponent: StripeInput,
+                            inputProps: {
+                                component: CardCvcElement
+                            }
+                        }}
                     />
                 </Grid>
             </Grid>
