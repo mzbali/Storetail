@@ -6,13 +6,15 @@ namespace API.Extensions
 {
     public static class BasketExtensions
     {
-        public static BasketDto? MapToBasketDto(this Basket basket)
+        public static BasketDto MapToBasketDto(this Basket basket)
         {
 
             return new BasketDto
             {
                 BasketId = basket.Id,
                 BuyerId = basket.BuyerId,
+                PaymentIntentId = basket.PaymentIntentId,
+                ClientSecret = basket.ClientSecret,
                 Items = basket.Items.Select(item => new BasketItemDto
                 {
                     ProductId = item.Product.Id,
