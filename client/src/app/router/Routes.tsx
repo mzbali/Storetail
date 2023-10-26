@@ -10,11 +10,11 @@ import {ProductDetails} from "../../features/catalog/ProductDetails";
 import {ServerError} from "../errors/ServerError";
 import {NotFound} from "../errors/NotFound";
 import RequireAuth from "./RequireAuth";
-import CheckoutPage from "../../features/checkout/CheckoutPage";
 import {BasketPage} from "../../features/basket/BasketPage";
 import OrderPage from "../../features/basket/OrderPage";
 import React from "react";
 import OrderDetails from "../../features/basket/OrderDetails";
+import CheckoutForm from "../../features/checkout/CheckoutForm";
 
 const router = createBrowserRouter([
     {
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
             {
                 element: <RequireAuth/>,
                 children: [
-                    {path: "checkout", element: <CheckoutPage/>}
+                    {path: "checkout", element: <CheckoutForm/>}
                 ]
             },
             {path: "", element: <HomePage/>},
