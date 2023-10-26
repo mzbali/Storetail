@@ -6,6 +6,10 @@ namespace API.Entities
         public string BuyerId { get; set; } = default!;
         public List<BasketItem> Items { get; set; } = new();
 
+        public string PaymentIntentId { get; set; } = default!;
+
+        public string ClientSecret { get; set; } = default!;
+
         // we'll send the productId then find the Product in controller, then add the item to Basket
         // so no need to find it in AddItem
         public void AddItem(Product product, int quantity)
