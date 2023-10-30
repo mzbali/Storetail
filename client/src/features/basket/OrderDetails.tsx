@@ -1,30 +1,28 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import BasketTable from "./BasketTable";
 import {Link, useParams} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../app/store/configureStore";
 import {BasketItem} from "../../app/models/basket";
 import BasketSummary from "./BasketSummary";
 import {Box, Button, Grid, Typography} from "@mui/material";
-import {fetchOrdersAsync} from "../checkout/checkoutSlice";
+import {LoadingComponent} from "../../app/layout/LoadingComponent";
+import agent from "../../app/api/agent";
+import {Order} from "../../app/models/order";
 
 const OrderDetails: React.FC = () => {
     const {id} = useParams();
-    const {orders} = useAppSelector(state => state.orders);
-    const dispatch = useAppDispatch();
+    const [order, setOrder] = useState<Order | null>(null);
 
     // Parse id and provide a default value of 0 if parsing fails
     const parsedId = parseInt(id as string) ?? 0;
 
     useEffect(() => {
-        try {
-            dispatch(fetchOrdersAsync());
-        } catch (error) {
-            console.log(error);
-        }
-    }, [dispatch]);
+        agent.Order.order(parsedId)
+            .then(value => setOrder(value))
+            .catch(e => console.log(e));
+    }, []);
 
-    if (!orders || parsedId < 0) {
-        return null;
+    if (order === null || parsedId < 0) {
+        return <LoadingComponent loadingText="Loading Orders"/>;
     }
 
     return (<Grid container>
@@ -37,11 +35,11 @@ const OrderDetails: React.FC = () => {
                         <Button variant="contained">Back to Orders</Button>
                     </Link>
                 </Box>
-                <BasketTable items={orders![parsedId]?.orderItems as BasketItem[]} isBasket={false}/>
+                <BasketTable items={order.orderItems as BasketItem[]} isBasket={false}/>
             </Grid>
             <Grid item xs={6}/>
             <Grid item xs={6}>
-                <BasketSummary subtotal={orders![parsedId]?.subTotal}/>
+                <BasketSummary subtotal={order.subTotal}/>
             </Grid>
         </Grid>
     );
