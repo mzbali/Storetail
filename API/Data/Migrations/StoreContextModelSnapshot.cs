@@ -35,11 +35,9 @@ namespace API.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ClientSecret")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PaymentIntentId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -90,6 +88,10 @@ namespace API.Data.Migrations
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PaymentIntentId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -197,14 +199,14 @@ namespace API.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "aec9d1ac-f36a-479f-8630-6fa89acc64b5",
+                            ConcurrencyStamp = "3e6392b3-e4de-4d5d-beac-8f66a99ef5da",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "5a442ebd-8979-4d25-9b34-7a1f52a8d354",
+                            ConcurrencyStamp = "66bebecf-eab7-4bae-89f2-ffb303ffe6fe",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
