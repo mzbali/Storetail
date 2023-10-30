@@ -14,7 +14,7 @@ import {BasketPage} from "../../features/basket/BasketPage";
 import OrderPage from "../../features/basket/OrderPage";
 import React from "react";
 import OrderDetails from "../../features/basket/OrderDetails";
-import CheckoutForm from "../../features/checkout/CheckoutForm";
+import CheckoutWrapper from "../../features/checkout/CheckoutWrapper";
 
 const router = createBrowserRouter([
     {
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
             {
                 element: <RequireAuth/>,
                 children: [
-                    {path: "checkout", element: <CheckoutForm/>}
+                    {path: "checkout", element: <CheckoutWrapper/>}
                 ]
             },
             {path: "", element: <HomePage/>},
