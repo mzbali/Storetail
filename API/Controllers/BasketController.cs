@@ -102,7 +102,9 @@ namespace API.Controllers
             }
             var basket = new Basket
             {
-                BuyerId = buyerId
+                BuyerId = buyerId,
+                PaymentIntentId = "",
+                ClientSecret = ""
             };
 
             _context.Baskets.Add(basket);
