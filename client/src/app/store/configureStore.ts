@@ -9,9 +9,9 @@ import checkoutSlice from "../../features/checkout/checkoutSlice";
 export const store = configureStore({
     reducer: {
         counter: counterSlice.reducer,
-        basket: basketSlice.reducer,
         catalog: catalogSlice.reducer,
         account: accountSlice.reducer,
+        basket: basketSlice.reducer,
         orders: checkoutSlice.reducer
     },
 });
