@@ -41,7 +41,7 @@ namespace API.Controllers
         public async Task<ActionResult<int>> CreateOrder(CreateOrderDto createOrderDto)
         {
             var basket = await _context.Baskets.RetrieveBasketWithItems(User.Identity.Name).FirstOrDefaultAsync();
-            if (basket is null)
+            if (basket == null)
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Could not find basket."
@@ -83,7 +83,8 @@ namespace API.Controllers
                 OrderItems = items,
                 SubTotal = total,
                 DeliveryFee = deliveryFee,
-                Status = OrderStatus.Pending
+                Status = OrderStatus.Pending,
+                PaymentIntentId = basket.PaymentIntentId
             };
             _context.Orders.Add(order);
             _context.Baskets.Remove(basket);

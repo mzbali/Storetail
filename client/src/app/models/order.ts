@@ -31,6 +31,7 @@ export interface Order {
     orderStatus: string;
     deliveryFee: number;
     total: number;
+    paymentIntentId?: string;
 }
 
 

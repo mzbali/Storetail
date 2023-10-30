@@ -25,7 +25,8 @@ namespace API.Extensions
                 SubTotal = o.SubTotal,
                 OrderStatus = o.Status.ToString(),
                 DeliveryFee = o.DeliveryFee,
-                Total = o.GetTotal()
+                Total = o.GetTotal(),
+                PaymentIntentId = o.PaymentIntentId
             }).AsNoTracking();
         }
     }
