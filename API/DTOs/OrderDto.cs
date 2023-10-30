@@ -13,5 +13,6 @@ namespace API.DTOs
         public string OrderStatus { get; set; }
         public long DeliveryFee { get; set; }
         public long Total { get; set; }
+        public string PaymentIntentId { get; set; }
     }
 }
