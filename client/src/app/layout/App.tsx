@@ -1,19 +1,22 @@
 import {useCallback, useEffect, useState} from "react";
 import {Container, createTheme, CssBaseline, ThemeProvider,} from "@mui/material";
 import {Header} from "./Header";
-import {Outlet} from "react-router-dom";
+import {Outlet, useLocation} from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {LoadingComponent} from "./LoadingComponent";
 import {useAppDispatch} from "../store/configureStore";
 import {fetchBasketAsync} from "../../features/basket/basketSlice";
 import {fetchCurrentUser} from "../../features/account/accountSlice";
+import {HomePage} from "../../features/home/HomePage";
 
 const App = () => {
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(true);
     const [darkMode, setDarkMode] = useState(false);
     const mode = darkMode ? "dark" : "light";
+
+    const location = useLocation();
 
     const initApp = useCallback(async () => {
         try {
@@ -50,9 +53,10 @@ const App = () => {
             />
             <CssBaseline/>
             <Header onSwitchClick={toggleThemeHandler} mode={darkMode}/>
-            <Container>
-                <Outlet/>
-            </Container>
+            {location.pathname === "/" ? <HomePage/> :
+                <Container sx={{pt: 4}}>
+                    <Outlet/>
+                </Container>}
         </ThemeProvider>
     );
 };
