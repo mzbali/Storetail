@@ -31,7 +31,11 @@ const SignedInMenu: React.FC = () => {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose}>Home</MenuItem>
+                <MenuItem onClick={handleClose}><
+                    Link to="/" style={{textDecoration: "none", color: "inherit"}}>
+                    Home
+                </Link>
+                </MenuItem>
                 <MenuItem onClick={handleClose}>
                     <Link to="/orders" style={{textDecoration: "none", color: "inherit"}}>
                         My Orders
