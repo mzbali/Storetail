@@ -76,7 +76,6 @@ export const accountSlice = createSlice({
             toast.error("Session expired - please login again");
         });
         builder.addMatcher(isAnyOf(loginUserAsync.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
-            console.log(action.payload);
             state.user = action.payload;
         });
     }
