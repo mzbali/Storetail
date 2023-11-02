@@ -19,7 +19,7 @@ export const HomePage: React.FC = () => {
                 </Button>
             )}>
                 {images.map(image => (
-                    <img src={`../../../public/images/${image}.jpg`} alt={image}
+                    <img key={image} src={`/images/${image}.jpg`} alt={image}
                          style={{display: "block", width: "100%", maxHeight: 700}}/>)
                 )}
             </Carousel>
