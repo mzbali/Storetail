@@ -100,6 +100,9 @@ if (app.Environment.IsDevelopment())
 // app.UseHttpsRedirection(); // No redirection to https, since in developer mode
 app.UseRouting();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors(opt =>
 {
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
@@ -110,5 +113,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapFallbackToController("Index", "Fallback");
 
 app.Run();
