@@ -55,7 +55,7 @@ const Login = () => {
                     {...register("name", {required: "Username is required."})}
                     margin="normal"
                     error={!!errors.name}
-                    helperText={errors?.name?.message}
+                    helperText={errors.name?.message ? errors.name.message.toString() : ""}
                 />
                 <TextField
                     fullWidth
@@ -65,7 +65,7 @@ const Login = () => {
                     {...register("password", {required: "Password is required."})}
                     margin="normal"
                     error={!!errors.password}
-                    helperText={errors?.password?.message}
+                    helperText={errors.password?.message ? errors.password.message.toString() : ""}
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary"/>}

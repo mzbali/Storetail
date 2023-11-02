@@ -78,7 +78,7 @@ const Register = () => {
                         }
                     })}
                     error={!!errors?.email}
-                    helperText={errors.email?.message}
+                    helperText={errors.email?.message ? errors.email.message.toString() : ""}
                 />
                 <TextField
                     margin="normal"
@@ -86,7 +86,7 @@ const Register = () => {
                     label="Username"
                     {...register("name", {required: "Username is required"})}
                     error={!!errors?.name}
-                    helperText={errors.name?.message}
+                    helperText={errors.name?.message ? errors.name.message.toString() : ""}
                 />
                 <TextField
                     margin="normal"
@@ -101,7 +101,7 @@ const Register = () => {
                         }
                     })}
                     error={!!errors?.password}
-                    helperText={errors.password?.message}
+                    helperText={errors.password?.message ? errors.password.message.toString() : ""}
                 />
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary"/>}
