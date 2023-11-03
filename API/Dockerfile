@@ -3,11 +3,11 @@ WORKDIR /app
 EXPOSE 8080
 
 # copy csproj and restore as distinct layers
-COPY ./API/*.csproj ./
+COPY *.csproj ./
 RUN dotnet restore
 
 # copy everything else and build
-COPY ./API ./
+COPY . ./
 RUN dotnet publish -c Release -o out
 
 # build a runtime image
