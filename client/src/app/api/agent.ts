@@ -5,7 +5,7 @@ import {Product} from "../models/product";
 import router from "../router/Routes";
 import {OrderValue} from "../models/order";
 
-axios.defaults.baseURL = "http://localhost:5000/api/";
+axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 axios.defaults.withCredentials = true; // to allow cookies to be sent to server.
 
 const responseBody = (response: AxiosResponse) => response.data;
