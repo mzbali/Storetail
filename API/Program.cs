@@ -63,8 +63,30 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<PaymentService>();
 
-var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection"); // connectionString of postgres database
+var connectionString = "";
+if (builder.Environment.IsDevelopment())
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); // connectionString of postgres database
+}
+else
+{
+    var pgHost = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+    var pgPort = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+    var pgUser = Environment.GetEnvironmentVariable("POSTGRES_USER");
+    var pgPass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+    var pgDb = Environment.GetEnvironmentVariable("POSTGRES_DB");
+
+    if (pgHost != null && pgPort != null && pgUser != null && pgPass != null && pgDb != null)
+    {
+        connectionString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
+    }
+    else
+    {
+        // Handle the case where environment variables are not set or incomplete.
+        // You can log an error or throw an exception if necessary.
+        throw new ApplicationException("PostgresSQL environment variables are not properly set.");
+    }
+}
 builder.Services.AddDbContext<StoreContext>(opt =>
         opt.UseNpgsql(connectionString) // connection with postgres
 );
