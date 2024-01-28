@@ -4,6 +4,10 @@ Storetail is an e-commerce website built with .Net 8 and React. It uses a variet
 
 ## Demo
 
+
+https://github.com/mzbali/Storetail/assets/25793615/d24f0514-3e23-4c26-b550-ab4574ec0e4e
+
+
 ## Tech Stack
 
 ### Back-end
