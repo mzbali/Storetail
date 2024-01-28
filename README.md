@@ -1,6 +1,8 @@
 # Storetail
 
-Storetail is an e-commerce website built with .Net 8 and React. It uses a variety of libraries and packages to provide a robust and user-friendly shopping experience.
+Storetail is an e-commerce website built with .Net 8 and React. It uses a variety of libraries and packages to provide a robust and user-friendly shopping experience. visit the live site [here](https://storetail.mzbali.com/catalog).
+
+## Demo
 
 ## Tech Stack
 
